@@ -43,10 +43,12 @@ jobs:
           ls -l ${{ env.BIN_NAME }}.exe ${{ env.BIN_NAME }}.exe.xz
           md5sum ${{ env.BIN_NAME }}.exe ${{ env.BIN_NAME }}.exe.xz
       - name: release (unix)
+        if: ${{ !contains(matrix.os, 'windows') }}
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ env.BIN_NAME }}.xz
       - name: release (clippyos)
+        if: ${{ contains(matrix.os, 'windows') }}
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ env.BIN_NAME }}.exe.xz
