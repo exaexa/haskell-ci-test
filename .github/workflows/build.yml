@@ -7,15 +7,13 @@ on:
       - master
   pull_request:
 
-env:
-  PROG_NAME: citest
-
 jobs:
   test:
     name: build for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     env:
-      BIN_NAME: $PROG_NAME-${{ matrix.os }}
+      PROG_NAME: citest
+      BIN_NAME: citest-${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
@@ -31,6 +29,6 @@ jobs:
       - run: |
           cabal build
           cp `cabal exec which $PROG_NAME` $BIN_NAME
-          xz -9 < $BIN_NAME > $BIN_NAME.xz
+          xz -9 -k $BIN_NAME
           ls -l $BIN_NAME $BIN_NAME.xz
           md5sum $BIN_NAME $BIN_NAME.xz
