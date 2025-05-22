@@ -1,14 +1,13 @@
 
-name: CI
+name: build
 
 on:
   push:
-    branches:
-      - master
-  pull_request:
+    tags:
+      - 'v*'
 
 jobs:
-  test:
+  build:
     name: build for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     env:
@@ -43,3 +42,11 @@ jobs:
           xz -9 -k ${{ env.BIN_NAME }}.exe
           ls -l ${{ env.BIN_NAME }}.exe ${{ env.BIN_NAME }}.exe.xz
           md5sum ${{ env.BIN_NAME }}.exe ${{ env.BIN_NAME }}.exe.xz
+      - name: release (unix)
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.BIN_NAME }}.xz
+      - name: release (clippyos)
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.BIN_NAME }}.exe.xz
