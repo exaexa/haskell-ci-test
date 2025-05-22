@@ -15,7 +15,7 @@ jobs:
     name: build for ${{ matrix.os }} - ${{ matrix.arch }}
     runs-on: ${{ matrix.os }}
     env:
-      BIN_NAME: ${{ PROG_NAME }}-${{ matrix.os }}-${{ matrix.arch }}
+      BIN_NAME: ${{ env.PROG_NAME }}-${{ matrix.os }}-${{ matrix.arch }}
     strategy:
       fail-fast: false
       matrix:
