@@ -38,15 +38,11 @@ jobs:
         run: |
           cp $( cabal list-bin ${{ env.PROG_NAME }} ) ${{ env.BIN_NAME }}
           xz -9 -k ${{ env.BIN_NAME }}
-          ls -l ${{ env.BIN_NAME }} ${{ env.BIN_NAME }}.xz
-          md5sum ${{ env.BIN_NAME }} ${{ env.BIN_NAME }}.xz
       - name: build (clippyos)
         if: ${{ contains(matrix.os, 'windows') }}
         run: |
           cp $( cabal list-bin ${{ env.PROG_NAME }} ) ${{ env.BIN_NAME }}.exe
           xz -9 -k ${{ env.BIN_NAME }}.exe
-          ls -l ${{ env.BIN_NAME }}.exe ${{ env.BIN_NAME }}.exe.xz
-          md5sum ${{ env.BIN_NAME }}.exe ${{ env.BIN_NAME }}.exe.xz
       - name: release (unix)
         if: ${{ !contains(matrix.os, 'windows') }}
         uses: softprops/action-gh-release@v2
