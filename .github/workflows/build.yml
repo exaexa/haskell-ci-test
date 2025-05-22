@@ -1,0 +1,39 @@
+
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+env:
+  PROG_NAME: citest
+
+jobs:
+  test:
+    name: build for ${{ matrix.os }} - ${{ matrix.arch }}
+    runs-on: ${{ matrix.os }}
+    env:
+      BIN_NAME: ${{ PROG_NAME }}-${{ matrix.os }}-${{ matrix.arch }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macOS-latest
+          - windows-latest
+        arch:
+          - x64
+          - aarch64
+    steps:
+      - uses: actions/checkout@v4
+      - uses: haskell-actions/setup@v2
+        with:
+          ghc-version: '9.4'
+      - run: |
+          cabal build
+          cp `cabal exec which $PROG_NAME` $BIN_NAME
+          xz -9 < $BIN_NAME > $BIN_NAME.xz
+          ls -l $BIN_NAME $BIN_NAME.xz
+          md5sum $BIN_NAME $BIN_NAME.xz
