@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       PROG_NAME: citest
-      BIN_NAME: citest-${{ matrix.os }}
+      BIN_NAME: citest-${{ github.ref_name }}-${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
